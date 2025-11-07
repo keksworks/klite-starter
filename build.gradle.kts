@@ -32,7 +32,7 @@ dependencies {
 sourceSets {
   main {
     kotlin.setSrcDirs(listOf("src"))
-    resources.setSrcDirs(listOf("src", "db")).exclude("**/*.kt")
+    resources.setSrcDirs(listOf("src", "db", "ui/i18n")).exclude("**/*.kt")
   }
   test {
     kotlin.setSrcDirs(listOf("test"))

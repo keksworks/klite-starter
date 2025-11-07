@@ -25,7 +25,7 @@ COPY --from=build-server /app/build/libs ./
 ARG VERSION=dev
 ENV VERSION=$VERSION
 RUN echo "Setting built version to $VERSION" && sed -Ei "s/\\\$VERSION/$VERSION/" ui/public/index.html
-RUN gzip -k9 ui/public/assets/* ui/public/img/*.svg
+RUN gzip -k9 ui/public/assets/*
 
 USER user
 
