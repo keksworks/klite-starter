@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.io.ByteArrayOutputStream
 
 plugins {
-  kotlin("jvm") version "2.2.0"
+  kotlin("jvm") version "2.2.21"
 }
 
 repositories {
@@ -12,13 +12,13 @@ repositories {
 }
 
 dependencies {
-  fun klite(module: String) = "com.github.codeborne.klite:klite-$module:1.7.0"
+  fun klite(module: String) = "com.github.keksworks.klite:klite-$module:1.7.0"
   implementation(klite("server"))
   implementation(klite("json"))
   implementation(klite("i18n"))
   implementation(klite("jdbc"))
   implementation(klite("slf4j"))
-  implementation("org.postgresql:postgresql:42.7.7")
+  implementation("org.postgresql:postgresql:42.7.8")
 
   testImplementation(klite("jdbc-test"))
   testImplementation("org.junit.jupiter:junit-jupiter:5.13.4")
