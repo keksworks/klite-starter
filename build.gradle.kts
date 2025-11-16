@@ -43,8 +43,7 @@ sourceSets {
 tasks.test {
   workingDir(rootDir)
   useJUnitPlatform()
-  // enable JUnitAssertionImprover from klite.jdbc-test
-  jvmArgs("-DENV=test", "-Djunit.jupiter.extensions.autodetection.enabled=true", "--add-opens=java.base/java.lang=ALL-UNNAMED", "-XX:-OmitStackTraceInFastThrow")
+  jvmArgs("-DENV=test", "--add-opens=java.base/java.lang=ALL-UNNAMED", "-XX:-OmitStackTraceInFastThrow")
 }
 
 tasks.withType<KotlinCompile> {
@@ -65,10 +64,10 @@ tasks.jar {
   dependsOn("deps")
   doFirst {
     manifest {
-      attributes(
+      attributes(mapOf(
         "Main-Class" to mainClassName,
         "Class-Path" to File("$buildDir/libs/deps").listFiles()?.joinToString(" ") { "deps/${it.name}"}
-      )
+      ))
     }
   }
 }
