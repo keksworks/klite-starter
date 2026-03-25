@@ -4,7 +4,7 @@
 
 This is a preconfigured sample/starter project with Kotlin/Klite with some best-practices:
 
-* Simple src/test directory structure
+* Simple src/test directory structure for backend code
 * Committed `.env` file for dev configuration
 * PostgreSQL in Docker Compose
 * [DB migrations](db) creating:
@@ -13,7 +13,7 @@ This is a preconfigured sample/starter project with Kotlin/Klite with some best-
 * Unit tests
 * Internationalization
 * TypeScript types generation for frontend
-* UI with Vite/Svelte/TailwindCSS - get more components from [Svelte Sample Repo](https://github.com/codeborne/svelte-sample)
+* [UI](ui) with Vite/Svelte/TailwindCSS - get more components from [Svelte Sample Repo](https://github.com/codeborne/svelte-sample)
 
 Follows [The Pure Code Manifesto](https://github.com/keksworks/manifesto) principles.
 
