@@ -10,7 +10,7 @@ services:
 
   db:
     restart: unless-stopped
-    image: postgres:17-alpine
+    image: postgres:18-alpine
     volumes:
       - ./db/init:/docker-entrypoint-initdb.d
       - data:/var/lib/postgresql/data
