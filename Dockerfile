@@ -7,7 +7,7 @@ RUN --mount=type=cache,target=/root/.npm npm ci
 RUN npm run build
 RUN npm run check
 
-FROM eclipse-temurin:21-alpine AS build-server
+FROM eclipse-temurin:25-alpine AS build-server
 WORKDIR /app
 
 COPY . ./

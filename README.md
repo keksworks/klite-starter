@@ -21,7 +21,7 @@ Check [Klite Tutorial](https://github.com/keksworks/klite/blob/main/TUTORIAL.md)
 
 ## Prerequisites
 
-* JDK 21+
+* JDK 25+
 * Node 24+
 * Docker
 
