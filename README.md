@@ -56,7 +56,7 @@ Server tests:
 `./gradlew test`
 
 Repository tests are integration tests, connecting to the real database, which runs in Docker.
-The test database name is `tracker_test`.
+The test database name ends with `_test`.
 
 UI tests:
 `cd ui && npm test`
