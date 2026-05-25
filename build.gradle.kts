@@ -11,13 +11,13 @@ repositories {
 }
 
 dependencies {
-  fun klite(module: String) = "com.github.keksworks.klite:klite-$module:1.8.2"
+  fun klite(module: String) = "com.github.keksworks.klite:klite-$module:1.8.3"
   implementation(klite("server"))
   implementation(klite("json"))
   implementation(klite("i18n"))
   implementation(klite("jdbc"))
   implementation(klite("slf4j"))
-  implementation("org.postgresql:postgresql:42.7.10")
+  implementation("org.postgresql:postgresql:42.7.11")
 
   testImplementation(klite("jdbc-test"))
   testImplementation("org.junit.jupiter:junit-jupiter:6.0.3")
