@@ -19,6 +19,7 @@
   * For route/service layers tests, extend `test/db/BaseMocks.kt` to avoid duplicating mock creation and basic setup
   * If there are new repositories/services, ass them to BaseMocks for reuse
   * PostgreSQL database changesets are in `db` directory following file per table structure
+  * Do not use generic suffixes in class name, e.g. Data, Info, Dto - make names show intent
   * Always run `./gradlew` with `--info` to see compilation errors/test failures
 * Frontend is in `ui` directory and written using Svelte+TypeScript with TailwindCSS
   * Prefer Svelte 4 syntax (without runes), use event handlers without colons
