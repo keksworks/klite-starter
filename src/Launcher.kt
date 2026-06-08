@@ -2,6 +2,7 @@ import auth.AccessChecker
 import db.initDB
 import klite.*
 import klite.annotations.annotated
+import klite.jdbc.RequestTransactionHandler
 import klite.json.JsonBody
 import todos.TodoRoutes
 import java.nio.file.Path
@@ -16,6 +17,7 @@ fun main() {
     httpExchangeCreator = XForwardedHttpExchange::class.primaryConstructor!!
   ).apply {
     initDB()
+    use<RequestTransactionHandler>()
 
     assets("/", AssetsHandler(Path.of("ui/public"), useIndexForUnknownPaths = true))
 
@@ -28,6 +30,7 @@ fun main() {
 
       annotated<TodoRoutes>("/todos")
     }
+
     start()
   }
 }
