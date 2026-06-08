@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.io.ByteArrayOutputStream
 
 plugins {
-  kotlin("jvm") version "2.3.20"
+  kotlin("jvm") version "2.4.0"
 }
 
 repositories {
@@ -24,7 +24,7 @@ dependencies {
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:6.0.3")
   testRuntimeOnly("org.junit.platform:junit-platform-launcher:6.0.3")
   testImplementation("ch.tutteli.atrium:atrium-fluent:1.3.0-alpha-2")
-  testImplementation("io.mockk:mockk:1.14.9")
+  testImplementation("io.mockk:mockk:1.14.11")
   testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.9.0")
 }
 
@@ -53,8 +53,9 @@ tasks.test {
 
 tasks.withType<KotlinCompile> {
   compilerOptions {
-    if (System.getProperty("user.name") != "root") finalizedBy("types.ts")
+    freeCompilerArgs.add("-Xreturn-value-checker=check")
   }
+  if (System.getProperty("user.name") != "root") finalizedBy("types.ts")
 }
 
 tasks.register<Copy>("deps") {
