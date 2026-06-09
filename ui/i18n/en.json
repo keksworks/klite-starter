@@ -1,6 +1,14 @@
 {
   "title": "Klite/Svelte starter",
+  "home": {
+    "title": "Home"
+  },
   "errors": {
-    "technical": "Technical error, please try again"
+    "technical": "Technical error, please try again",
+    "notFound": "Not found",
+    "notFoundInstructions": "Please check the URL in the address bar and try again",
+    "alreadyExists": "Already exists",
+    "networkUnavailable": "Cannot connect to the server, please try again later",
+    "notJson": "Communication with server is blocked, please check your network connection"
   }
 }
