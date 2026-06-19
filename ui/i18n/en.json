@@ -1,7 +1,8 @@
 {
   "title": "Klite/Svelte starter",
   "home": {
-    "title": "Home"
+    "title": "Home",
+    "welcome": "Welcome to Klite/Svelte starter"
   },
   "errors": {
     "technical": "Technical error, please try again",

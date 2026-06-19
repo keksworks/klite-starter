@@ -1,8 +1,7 @@
 <script lang="ts">
-  import Spinner from 'src/components/Spinner.svelte'
+  import {t} from 'i18n'
 </script>
 
 <p class="text-center pt-10">
-  Welcome
-  <Spinner/>
+  {t.home.welcome}
 </p>
