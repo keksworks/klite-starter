@@ -6,6 +6,5 @@ import {initErrorHandlers} from 'src/api/errorHandlers'
 
 initErrorHandlers()
 
-const app = mount(App, {
-  target: document.getElementById('app')!,
-})
+mount(App, {target: document.getElementById('app')!})
+document.getElementById('spinner')!.parentElement!.hidden = true
