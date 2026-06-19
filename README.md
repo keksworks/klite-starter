@@ -13,7 +13,7 @@ This is a preconfigured sample/starter project with Kotlin/Klite with some best-
 * Unit tests
 * Internationalization
 * TypeScript types generation for frontend
-* [UI](ui) with Vite/Svelte/TailwindCSS - get more components from [Svelte Sample Repo](https://github.com/codeborne/svelte-sample)
+* [UI](ui) with Vite/Svelte/TailwindCSS - get more components from [Svelte Sample Repo](https://github.com/keksworks/svelte-sample)
 
 Follows [The Pure Code Manifesto](https://github.com/keksworks/manifesto) principles.
 
