@@ -28,7 +28,5 @@
 
 <main class="p-4">
   <h1 class="mb-4">{activePage?.title}</h1>
-  <Router routes={pages} bind:matchedPath>
-    <Route component={NotFoundPage}/>
-  </Router>
+  <Router routes={pages} bind:matchedPath noMatch={NotFoundPage}/>
 </main>
