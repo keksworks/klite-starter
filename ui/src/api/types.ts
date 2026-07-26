@@ -8,5 +8,7 @@ export enum Role {ADMIN = 'ADMIN', USER = 'USER'}
 // class users.User
 export interface User {firstName: string; id: Id<User>; lastName: string; role: Role}
 
+// klite.Id
+export type Id<T> = string & {_of?: T}
 // java.time.Instant
 export type Instant = `${number}-${number}-${number}T${number}:${number}:${number}Z`

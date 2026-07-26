@@ -1,12 +1,14 @@
 <script lang="ts">
   import {t} from 'i18n'
   import Toasts from 'src/components/Toasts.svelte'
-  import {Link, Route, Router} from '@keksworks/svelte-tiny-router'
+  import {Link, Router} from '@keksworks/svelte-tiny-router'
   import HomePage from 'src/pages/HomePage.svelte'
   import NotFoundPage from 'src/pages/NotFoundPage.svelte'
 
   const pages = {
     '/': {title: t.home.title, component: HomePage},
+    '/2': {title: t.home.title + 2, component: HomePage},
+    '/3': {title: t.home.title + 3, component: HomePage},
   }
 
   let matchedPath: keyof typeof pages
@@ -24,6 +26,7 @@
   {#each Object.entries(pages) as [path, page]}
     <Link to={path} label={page.title} class="{path === matchedPath ? 'font-bold' : ''}"/>
   {/each}
+  <Link to="/nf" label="Not found"/>
 </menu>
 
 <main class="p-4">
