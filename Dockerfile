@@ -1,4 +1,4 @@
-FROM node:24-alpine AS build-ui
+FROM node:26-alpine AS build-ui
 WORKDIR /ui
 
 COPY ui ./
