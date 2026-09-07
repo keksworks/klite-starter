@@ -4,6 +4,25 @@
     "title": "Home",
     "welcome": "Welcome to Klite/Svelte starter"
   },
+  "login": {
+    "link": "Login",
+    "email": "E-mail",
+    "sendCode": "Send code to email",
+    "codeSent": "Code sent to {email}, check your email and enter it below",
+    "code": "Login code",
+    "logout": "Logout",
+    "noUser": "User not found"
+  },
+  "general": {
+    "confirm": "Confirm",
+    "cancel": "Cancel"
+  },
+  "emails": {
+    "loginCode": {
+      "subject": "Your login code",
+      "body": "Your one-time login code is <b>{code}</b>.\n\nIf you didn't request this code, please ignore this message."
+    }
+  },
   "errors": {
     "technical": "Technical error, please try again",
     "notFound": "Not found",

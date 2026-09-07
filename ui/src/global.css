@@ -122,3 +122,12 @@
 html.loading {
   cursor: wait;
 }
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center px-4 py-2 rounded font-medium text-sm bg-primary-600 text-white hover:bg-primary-700 cursor-pointer;
+  }
+  .btn.outlined {
+    @apply border border-gray-300 bg-white text-gray-700 hover:bg-gray-50;
+  }
+}

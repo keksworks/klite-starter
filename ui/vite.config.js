@@ -15,7 +15,10 @@ export default defineConfig({
   server: {
     port: 8000,
     proxy: {
-      '/api': 'http://localhost:8080',
+      '^/(api|oauth)': {
+        target: 'http://localhost:8080',
+        changeOrigin: false
+      },
     }
   },
   build: {

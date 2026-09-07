@@ -16,6 +16,8 @@ dependencies {
   implementation(klite("json"))
   implementation(klite("i18n"))
   implementation(klite("jdbc"))
+  implementation(klite("oauth"))
+  implementation(klite("smtp"))
   implementation(klite("slf4j"))
   implementation("org.postgresql:postgresql:42.7.13")
 

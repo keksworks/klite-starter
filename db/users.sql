@@ -1,7 +1,13 @@
 --changeset users
 create table users(
   ${id},
-  firstName text not null,
-  lastName text not null,
-  role text not null
+  name text not null,
+  email text unique not null,
+  avatarUrl text,
+  lang text not null default 'en',
+  role text not null,
+  lastLoginAt timestamptz,
+  updatedAt timestamptz not null default now(),
+  createdAt timestamptz not null default now(),
+  ${createdBy}
 );

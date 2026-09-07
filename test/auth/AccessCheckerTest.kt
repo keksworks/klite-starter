@@ -26,7 +26,7 @@ class AccessCheckerTest: BaseMocks() {
 
   @Test fun `access granted`() {
     every { exchange.session["userId"] } returns user.id.toString()
-    every { exchange.route.annotations } returns listOf(Access(user.role))
+    every { exchange.route.annotations } returns listOf(Access(USER))
     checker.before(exchange)
     verify {
       exchange.attr("user", user)
