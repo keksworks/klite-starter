@@ -12,7 +12,7 @@
     "test:run": "vitest run"
   },
   "devDependencies": {
-    "@keksworks/svelte-tiny-router": "^0.5.0",
+    "@keksworks/svelte-tiny-router": "^0.5.1",
     "@sveltejs/vite-plugin-svelte": "^7.3.0",
     "@tailwindcss/forms": "^0.5.11",
     "@tailwindcss/vite": "^4.3.0",
