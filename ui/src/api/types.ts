@@ -1,4 +1,3 @@
-export type Id<T extends Entity<T>> = string & {_of?: T}
 export type Entity<T extends Entity<T>> = {id: Id<T>}
 
 // class auth.EmailCodeRequest
