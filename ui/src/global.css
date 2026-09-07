@@ -38,8 +38,11 @@
     vertical-align: top;
   }
 
-  a {
+  a, button {
     cursor: pointer;
+  }
+
+  a {
     @apply text-primary-600 hover:text-primary-700;
   }
 

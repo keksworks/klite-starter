@@ -2,10 +2,11 @@
   import {t} from 'i18n'
   import {logout, user} from 'src/stores/auth'
   import Toasts from 'src/components/Toasts.svelte'
-  import {Link, Route, Router} from '@keksworks/svelte-tiny-router'
+  import {activePath, Link, Route, Router} from '@keksworks/svelte-tiny-router'
   import HomePage from 'src/pages/HomePage.svelte'
   import NotFoundPage from 'src/pages/NotFoundPage.svelte'
   import LoginPage from 'src/pages/login/LoginPage.svelte'
+  import LoginButton from 'src/pages/login/LoginButton.svelte'
 
   const pages = {
     '/': {title: t.home.title, component: HomePage},
@@ -28,10 +29,15 @@
   {/each}
   <span class="ml-auto">
     {#if $user}
-      <span class="mr-2 text-sm text-gray-600">{$user.name}</span>
-      <button class="btn outlined text-sm" on:click={logout}>{t.login.logout}</button>
-    {:else}
-      <Link to="/login" label={t.login.link}/>
+      <span class="flex items-center gap-2">
+        {#if $user.avatarUrl}
+          <img src={$user.avatarUrl} alt="" class="w-7 h-7 rounded-full">
+        {/if}
+        <span class="text-sm text-gray-600">{$user.name}</span>
+        <button class="btn outlined text-sm" on:click={logout}>{t.login.logout}</button>
+      </span>
+    {:else if $activePath !== '/login'}
+      <LoginButton redirect={location.pathname} class="default"/>
     {/if}
   </span>
 </menu>
