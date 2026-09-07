@@ -10,7 +10,7 @@ export interface Todo {completedAt?: Instant; id: Id<Todo>; item: string}
 // class users.Role
 export enum Role {ADMIN = 'ADMIN', USER = 'USER'}
 // class users.User
-export interface User {avatarUrl?: URI; createdAt: Instant; email: Email; firstName: string; id: Id<User>; lang: string; lastLoginAt?: Instant; lastName: string; name: string; role: Role; updatedAt?: Instant}
+export interface User {avatarUrl?: URI; createdAt: Instant; email: Email; firstName: string; id: Id<User>; lang: string; lastLoginAt?: Instant; lastName: string; name: string; refreshToken?: string; role: Role; updatedAt?: Instant}
 
 // klite.Id
 export type Id<T> = string & {_of?: T}

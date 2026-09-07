@@ -14,16 +14,17 @@ enum class Role {
 }
 
 data class User(
-  val name: String,
+  override val firstName: String,
+  override val lastName: String,
   override val email: Email,
   val avatarUrl: URI? = null,
   val lastLoginAt: Instant? = null,
   val lang: String = "en",
+  val refreshToken: String? = null,
   val role: Role = Role.USER,
   override var updatedAt: Instant? = null,
   val createdAt: Instant = nowSec(),
   override val id: Id<User> = Id(),
 ): Entity<User>, OAuthUser, UpdatableEntity {
-  override val firstName get() = name.substringBefore(" ")
-  override val lastName get() = name.substringAfter(" ")
+  val name get() = "$firstName $lastName"
 }

@@ -34,6 +34,7 @@ abstract class BaseMocks {
 
     userRepository.apply {
       every { get(user.id) } returns user
+      every { save(any()) } returns 1
     }
   }
 }
