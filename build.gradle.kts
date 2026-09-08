@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.io.ByteArrayOutputStream
 
 plugins {
-  kotlin("jvm") version "2.4.0"
+  kotlin("jvm") version "2.4.20"
 }
 
 repositories {
@@ -11,7 +11,7 @@ repositories {
 }
 
 dependencies {
-  fun klite(module: String) = "com.github.keksworks.klite:klite-$module:2.0.4"
+  fun klite(module: String) = "com.github.keksworks.klite:klite-$module:2.0.5"
   implementation(klite("server"))
   implementation(klite("json"))
   implementation(klite("i18n"))
