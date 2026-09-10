@@ -69,21 +69,3 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-
-#  deploy:
-#    runs-on: ubuntu-latest
-#    needs: build-and-push
-#    if: github.event_name == 'push'
-#    steps:
-#      - name: Checkout repository
-#        uses: actions/checkout@v7
-#
-#      - name: Deploy to server
-#        run: |
-#          echo "$DEPLOY_SSH_KEY" > /tmp/deploy_key && chmod 600 /tmp/deploy_key
-#          OPTS="-i /tmp/deploy_key -o StrictHostKeyChecking=no"
-#          scp $OPTS deploy.sh compose*.yml .env "$DEPLOY_SSH_HOST":timetracker
-#          ssh $OPTS "$DEPLOY_SSH_HOST" "cd timetracker && ./deploy.sh"
-#        env:
-#          DEPLOY_SSH_HOST: ${{ secrets.DEPLOY_SSH_HOST }}
-#          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
