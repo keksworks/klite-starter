@@ -29,7 +29,7 @@ fun main() {
     assets("/", AssetsHandler(Path.of("ui/public"), useIndexForUnknownPaths = true))
 
     register(httpClient())
-    register(if (Config.isProd) SmtpEmailSender::class else FakeEmailSender::class)
+    register(if (Config.optional("SMTP_HOST") != null) SmtpEmailSender::class else FakeEmailSender::class)
 
     context("/oauth") {
       register<OAuthUserProvider>(AuthUserProvider::class)
