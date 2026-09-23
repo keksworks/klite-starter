@@ -12,18 +12,18 @@
     "test:run": "vitest run"
   },
   "devDependencies": {
-    "@keksworks/svelte-tiny-router": "^0.5.1",
-    "@sveltejs/vite-plugin-svelte": "^7.3.0",
+    "@keksworks/svelte-tiny-router": "^0.5.2",
+    "@sveltejs/vite-plugin-svelte": "^7.3.1",
     "@tailwindcss/forms": "^0.5.11",
     "@tailwindcss/vite": "^4.3.0",
     "@testing-library/svelte": "^5.3.1",
     "@tsconfig/svelte": "^5.0.4",
     "jsdom": "^30.0.1",
-    "svelte": "^5.57.0",
+    "svelte": "^5.57.1",
     "svelte-check": "^4.1.0",
     "tailwindcss": "^4.3.0",
     "typescript": "^5.9.3",
-    "vite": "^8.2.2",
+    "vite": "^8.3.0",
     "vitest": "^4.1.11"
   },
   "browserslist": [
