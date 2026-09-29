@@ -103,11 +103,12 @@ describe('api', () => {
     beforeEach(() => {
       form = document.createElement('form')
       button = document.createElement('button')
+      button.type = 'submit'
       form.appendChild(button)
       document.body.appendChild(form)
     })
 
-    it('disable any form button', async () => {
+    it('disable submit button', async () => {
       const promise = api.requestJson('path', {method: 'POST'})
       expect(button.disabled).to.be.true
       await promise
@@ -121,8 +122,19 @@ describe('api', () => {
       expect(button.disabled).to.be.false
     })
 
+    it('does not disable non-submit buttons', async () => {
+      const plainButton = document.createElement('button')
+      form.appendChild(plainButton)
+
+      const promise = api.requestJson('path', {method: 'POST'})
+      expect(plainButton.disabled).to.be.false
+      await promise
+      expect(plainButton.disabled).to.be.false
+    })
+
     it('does not enable disabled buttons', async () => {
       const disabledButton = document.createElement('button')
+      disabledButton.type = 'submit'
       disabledButton.disabled = true
       form.appendChild(disabledButton)
 
