@@ -8,7 +8,7 @@
   export let narrow = false
 </script>
 
-<a href="{url}?redirect={redirect}" class="btn flex gap-2 !px-2.5 items-center outlined secondary {$$props.class ?? ''}">
+<a href="{url}?redirect={redirect}" class="btn flex gap-2 px-2.5! items-center outlined secondary {$$props.class ?? ''}">
   {label ? '' : t.login.link}
   <img src="/img/google.svg" class="h-4 w-4" title="Google Login" alt="">
   {#if label}

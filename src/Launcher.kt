@@ -12,8 +12,10 @@ import klite.oauth.OAuthUserProvider
 import klite.smtp.FakeEmailSender
 import klite.smtp.SmtpEmailSender
 import todos.TodoRoutes
+import java.lang.management.ManagementFactory.getRuntimeMXBean
 import java.nio.file.Path
 import kotlin.reflect.full.primaryConstructor
+import kotlin.system.exitProcess
 import kotlin.time.Duration.Companion.days
 
 fun main() {
@@ -52,5 +54,8 @@ fun main() {
     }
 
     start()
+
+    if (getRuntimeMXBean().inputArguments.any { it.startsWith("-XX:AOTCacheOutput") })
+      exitProcess(0)
   }
 }

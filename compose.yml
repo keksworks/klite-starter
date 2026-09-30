@@ -1,6 +1,9 @@
 services:
   app:
-    build: .
+    build:
+      context: .
+      extra_hosts:
+        - "host.docker.internal:host-gateway"
     restart: unless-stopped
     depends_on:
       - db

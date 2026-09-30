@@ -19,6 +19,7 @@ RUN adduser -S user
 RUN rm -fr /usr/sbin /bin/ch*
 
 WORKDIR /app
+COPY .env ./
 COPY --from=build-ui /ui/build ui/public
 COPY --from=build-server /app/build/libs ./
 
@@ -31,7 +32,9 @@ USER user
 
 ENV TZ=Europe/London
 ENV JAVA_TOOL_OPTIONS="-Xss256K -XX:MaxRAMPercentage=60 -XX:+ExitOnOutOfMemoryError"
-CMD java -jar *.jar
+
+RUN ENV=prod DB_URL=jdbc:postgresql://host.docker.internal:5644/user java -XX:AOTCacheOutput=/tmp/aot.cache -jar *.jar
+CMD java -XX:AOTCache=/tmp/aot.cache -jar *.jar
 
 ENV PORT=8080
 EXPOSE $PORT

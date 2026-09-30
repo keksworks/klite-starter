@@ -38,6 +38,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Start DB for AOT cache training
+        run: docker compose up -d --wait db
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -67,5 +70,7 @@ jobs:
           push: ${{ github.event_name == 'push' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          add-hosts: |
+            host.docker.internal:host-gateway
           cache-from: type=gha
           cache-to: type=gha,mode=max
