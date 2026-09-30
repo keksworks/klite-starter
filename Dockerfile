@@ -33,7 +33,7 @@ USER user
 ENV TZ=Europe/London
 ENV JAVA_TOOL_OPTIONS="-Xss256K -XX:MaxRAMPercentage=60 -XX:+ExitOnOutOfMemoryError"
 
-RUN ENV=prod DB_URL=jdbc:postgresql://host.docker.internal:5644/user java -XX:AOTCacheOutput=/tmp/aot.cache -jar *.jar
+RUN ENV=prod DB_URL=jdbc:postgresql://host.docker.internal:5644/user java -XX:AOTCacheOutput=/tmp/aot.cache -jar *.jar || true
 CMD java -XX:AOTCache=/tmp/aot.cache -jar *.jar
 
 ENV PORT=8080
