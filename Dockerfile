@@ -28,13 +28,13 @@ ENV VERSION=$VERSION
 RUN echo "Setting built version to $VERSION" && sed -Ei "s/\\\$VERSION/$VERSION/" ui/public/index.html
 RUN gzip -k9 ui/public/assets/*
 
-USER user
-
 ENV TZ=Europe/London
 ENV JAVA_TOOL_OPTIONS="-Xss256K -XX:MaxRAMPercentage=60 -XX:+ExitOnOutOfMemoryError"
 
-RUN ENV=prod DB_URL=jdbc:postgresql://host.docker.internal:5644/user java -XX:AOTCacheOutput=/tmp/aot.cache -jar *.jar || true
-CMD java -XX:AOTCache=/tmp/aot.cache -jar *.jar
+RUN ENV=prod DB_URL=jdbc:postgresql://host.docker.internal:5644/user java -XX:AOTCacheOutput=aot.cache -jar *.jar || true
+
+USER user
+CMD java -XX:AOTCache=aot.cache -jar *.jar
 
 ENV PORT=8080
 EXPOSE $PORT
