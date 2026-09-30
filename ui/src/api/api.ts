@@ -73,7 +73,7 @@ class Api {
 
   disableSubmitButtons(method?: string) {
     if (method === 'GET') return
-    const buttons = document.querySelectorAll<HTMLButtonElement>("form button:not(:disabled)")
+    const buttons = document.querySelectorAll<HTMLButtonElement>("form button[type=submit]:not(:disabled)")
     buttons.forEach(btn => btn.disabled = true)
     return buttons
   }
