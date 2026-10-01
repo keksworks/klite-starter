@@ -5,6 +5,7 @@
 * Use camelCase for fields, in DB/Entities/JSON to avoid conversions
 * Backend code is written in Kotlin using Klite framework; code must be short and concise
   * Klite guide: https://raw.githubusercontent.com/keksworks/klite/refs/heads/main/llms.txt
+  * Ask user where already cloned klite repo is or offer to clone it if more deep exploration is needed
   * Gradle source directories are simplified (just `src` & `test`)
   * In Kotlin, prefer expression body functions
   * Repositories can extend `db.CrudRepository` to avoid implementing all the basic operations
