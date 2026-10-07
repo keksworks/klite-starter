@@ -1,5 +1,8 @@
 import api, {headers} from './api'
 import type {MockInstance} from 'vitest'
+import {refreshOnNextNavigate} from '@keksworks/svelte-tiny-router'
+
+vi.mock('@keksworks/svelte-tiny-router', () => ({refreshOnNextNavigate: vi.fn()}))
 
 const successfulResponse = {status: 200, headers: {get: () => undefined}, json: () => 'data'} as any
 
@@ -19,12 +22,9 @@ describe('api', () => {
   })
 
   it('refreshes on next navigate if version mismatch', async () => {
-    window.apiVersion = '2.3'
-    window.location = {reload: vi.fn()} as any
     fetch.mockResolvedValue({...successfulResponse, headers: {get: () => '2.2'}})
     await api.requestJson('path', {body: {data: 'data'}})
-    expect(location.reload).toHaveBeenCalled()
-    window.apiVersion = undefined
+    expect(refreshOnNextNavigate).toHaveBeenCalled()
   })
 
   it('supports null json response', async () => {
@@ -47,6 +47,22 @@ describe('api', () => {
       expect(e).to.deep.equal({statusCode: 403, message: 'Forbidden', reason: 'Forbidden'})
       expect(document.documentElement.classList.contains('loading')).to.be.false
     })
+  })
+
+  it('uses server error detail before message and title', () => {
+    fetch.mockResolvedValue({
+      status: 400,
+      json: () => Promise.resolve({detail: 'Detailed error', message: 'Message error', title: 'Title error'})
+    })
+    return api.requestJson('path').catch(e => expect(e.message).to.eq('Detailed error'))
+  })
+
+  it('falls back to server error title', () => {
+    fetch.mockResolvedValue({
+      status: 400,
+      json: () => Promise.resolve({title: 'Title error'})
+    })
+    return api.requestJson('path').catch(e => expect(e.message).to.eq('Title error'))
   })
 
   describe('requests', () => {
@@ -103,12 +119,11 @@ describe('api', () => {
     beforeEach(() => {
       form = document.createElement('form')
       button = document.createElement('button')
-      button.type = 'submit'
       form.appendChild(button)
       document.body.appendChild(form)
     })
 
-    it('disable submit button', async () => {
+    it('disable any form button', async () => {
       const promise = api.requestJson('path', {method: 'POST'})
       expect(button.disabled).to.be.true
       await promise
@@ -122,19 +137,8 @@ describe('api', () => {
       expect(button.disabled).to.be.false
     })
 
-    it('does not disable non-submit buttons', async () => {
-      const plainButton = document.createElement('button')
-      form.appendChild(plainButton)
-
-      const promise = api.requestJson('path', {method: 'POST'})
-      expect(plainButton.disabled).to.be.false
-      await promise
-      expect(plainButton.disabled).to.be.false
-    })
-
     it('does not enable disabled buttons', async () => {
       const disabledButton = document.createElement('button')
-      disabledButton.type = 'submit'
       disabledButton.disabled = true
       form.appendChild(disabledButton)
 
