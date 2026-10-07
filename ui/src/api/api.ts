@@ -1,6 +1,14 @@
-export const headers = {'Content-Type': 'application/json; charset=UTF-8', 'Accept': 'application/json'} as HeadersInit
+import {refreshOnNextNavigate} from '@keksworks/svelte-tiny-router'
 
-type Body = object|string|FormData|File
+const apiVersion = (document.querySelector('meta[name=version]') as HTMLMetaElement)?.content
+
+export const headers = {
+  'Content-Type': 'application/json; charset=UTF-8',
+  'Accept': 'application/json',
+  'x-api-version': apiVersion
+} as HeadersInit
+
+type Body = object|string|FormData|File|Blob
 
 class Api {
   prefix = '/api/'
@@ -14,14 +22,14 @@ class Api {
     const body = init?.body
     return fetch(path, {
       ...init,
-      body: body instanceof File || body instanceof FormData || typeof body == 'string' ? body : body && JSON.stringify(body),
+      body: body instanceof File || body instanceof FormData || body instanceof Blob || typeof body == 'string' ? body : body && JSON.stringify(body),
       headers: init?.headers ?? headers
     })
-    .catch(this.handleFetchFailure)
-    .finally(() => {
-      document.documentElement.classList.remove('loading')
-      disabledButtons?.forEach(btn => btn.disabled = false)
-    }) as Promise<Response>
+      .catch(this.handleFetchFailure)
+      .finally(() => {
+        document.documentElement.classList.remove('loading')
+        disabledButtons?.forEach(btn => btn.disabled = false)
+      }) as Promise<Response>
   }
 
   requestJson(path: string, init?: RequestInit | {body?: Body, headers?: HeadersInit}) {
@@ -36,12 +44,12 @@ class Api {
       console.error('Not a JSON', e)
       throw {message: 'errors.notJson'}
     }
-    const apiVersion = response.headers?.get('x-api-version')
+    const responseVersion = response.headers?.get('x-api-version')
     if (response.status < 200 || response.status >= 400) {
       data.message = data.detail || data.message || data.title || data.reason
       throw data
-    } else if (apiVersion && apiVersion != window.apiVersion) {
-      location.reload()
+    } else if (responseVersion && responseVersion != apiVersion) {
+      refreshOnNextNavigate()
     }
     return data
   }
@@ -63,7 +71,7 @@ class Api {
     return this.requestJson(path, {method: 'PUT', body, headers})
   }
 
-  delete(path: string) {
+  delete<T>(path: string): Promise<T> {
     return this.requestJson(path, {method: 'DELETE'})
   }
 
@@ -73,7 +81,7 @@ class Api {
 
   disableSubmitButtons(method?: string) {
     if (method === 'GET') return
-    const buttons = document.querySelectorAll<HTMLButtonElement>("form button[type=submit]:not(:disabled)")
+    const buttons = document.querySelectorAll<HTMLButtonElement>("form button:not(:disabled)")
     buttons.forEach(btn => btn.disabled = true)
     return buttons
   }

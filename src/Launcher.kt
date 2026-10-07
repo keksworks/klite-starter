@@ -42,6 +42,12 @@ fun main() {
     context("/api") {
       useOnly<JsonBody>()
 
+      val version = Config.optional("VERSION") ?: "\$VERSION"
+      before { e ->
+        if (e.method == GET) e.header("x-api-version", version)
+        e.header("Cache-control", "max-age=0, private")
+      }
+
       post("/js-error") { logger("js-error").error(rawBody) }
 
       if (!Config.isProd) annotated<FakeAuthRoutes>()
