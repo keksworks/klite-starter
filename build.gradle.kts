@@ -19,7 +19,7 @@ dependencies {
   implementation(klite("oauth"))
   implementation(klite("email"))
   implementation(klite("slf4j"))
-  implementation("org.postgresql:postgresql:42.7.13")
+  implementation("org.postgresql:postgresql:42.7.14")
 
   testImplementation(klite("jdbc-test"))
   testImplementation("org.junit.jupiter:junit-jupiter:6.0.3")
