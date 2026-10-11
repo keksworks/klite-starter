@@ -11,13 +11,13 @@ repositories {
 }
 
 dependencies {
-  fun klite(module: String) = "com.github.keksworks.klite:klite-$module:2.0.7"
+  fun klite(module: String) = "com.github.keksworks.klite:klite-$module:8bd1db7e" // 2.0.7+
   implementation(klite("server"))
   implementation(klite("json"))
   implementation(klite("i18n"))
   implementation(klite("jdbc"))
   implementation(klite("oauth"))
-  implementation(klite("smtp"))
+  implementation(klite("email"))
   implementation(klite("slf4j"))
   implementation("org.postgresql:postgresql:42.7.13")
 
@@ -92,8 +92,6 @@ tasks.register<JavaExec>("types.ts") {
   args("${project.buildDir}/classes/kotlin/main")
   standardOutput = ByteArrayOutputStream()
   doLast {
-    project.file("ui/src/api/types.ts").writeText("""
-      export type Entity<T extends Entity<T>> = {id: Id<T>}
-      """.trimIndent() + "\n\n" + standardOutput.toString().replace("TSID", "Id"))
+    project.file("ui/src/api/types.ts").writeText(standardOutput.toString().replace("TSID", "Id"))
   }
 }

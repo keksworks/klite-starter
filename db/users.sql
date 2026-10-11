@@ -9,8 +9,7 @@ create table users(
   role text not null,
   refreshToken text,
   lastLoginAt timestamptz,
-  updatedAt timestamptz not null default now(),
-  createdAt timestamptz not null default now(),
+  ${updatedAt},
   ${createdBy}
 );
 

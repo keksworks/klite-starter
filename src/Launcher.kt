@@ -1,7 +1,10 @@
 import auth.*
 import db.initDB
 import klite.*
+import klite.RequestMethod.GET
 import klite.annotations.annotated
+import klite.email.FakeEmailSender
+import klite.email.SmtpEmailSender
 import klite.http.httpClient
 import klite.jdbc.RequestTransactionHandler
 import klite.json.JsonBody
@@ -9,12 +12,9 @@ import klite.oauth.AuthRoutes
 import klite.oauth.GoogleOAuthClient
 import klite.oauth.OAuthRoutes
 import klite.oauth.OAuthUserProvider
-import klite.smtp.FakeEmailSender
-import klite.smtp.SmtpEmailSender
 import todos.TodoRoutes
 import java.lang.management.ManagementFactory.getRuntimeMXBean
 import java.nio.file.Path
-import kotlin.reflect.full.primaryConstructor
 import kotlin.system.exitProcess
 import kotlin.time.Duration.Companion.days
 
@@ -23,7 +23,7 @@ fun main() {
 
   Server(
     sessionStore = CookieSessionStore(cookie = Cookie("S", "", httpOnly = true, secure = Config.isProd, maxAge = 365.days)),
-    httpExchangeCreator = XForwardedHttpExchange::class.primaryConstructor!!
+    httpExchangeCreator = ::XForwardedHttpExchange
   ).apply {
     initDB()
     use<RequestTransactionHandler>()

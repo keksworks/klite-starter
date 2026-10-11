@@ -4,11 +4,11 @@ import klite.Email
 import klite.HttpExchange
 import klite.NotFoundException
 import klite.annotations.POST
+import klite.email.EmailContent
+import klite.email.EmailSender
 import klite.i18n.lang
 import klite.jdbc.nowSec
 import klite.oauth.initSession
-import klite.smtp.EmailContent
-import klite.smtp.EmailSender
 import users.User
 import users.UserRepository
 
