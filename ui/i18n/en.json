@@ -10,8 +10,7 @@
     "sendCode": "Send code to email",
     "codeSent": "Code sent to {email}, check your email and enter it below",
     "code": "Login code",
-    "logout": "Logout",
-    "noUser": "User not found"
+    "logout": "Logout"
   },
   "general": {
     "confirm": "Confirm",

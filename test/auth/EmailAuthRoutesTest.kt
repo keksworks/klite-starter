@@ -38,6 +38,17 @@ class EmailAuthRoutesTest: BaseMocks() {
     expect(session["userId"]).toEqual(user.id.toString())
   }
 
+  @Test fun `loginWithCode creates user when missing`() {
+    every { userRepository.by(User::email to email) } returns null
+    session["emailCode"] = "$email:123456"
+    session["codeTime"] = nowSec().epochSecond.toString()
+
+    val result = routes.loginWithCode(EmailCodeRequest(email, "123456"), exchange)
+    expect(result).toEqual(User("Jane.doe", "", email).copy(id = result.id, lastLoginAt = result.lastLoginAt))
+    verify { userRepository.save(result) }
+    expect(session["userId"]).toEqual(result.id.toString())
+  }
+
   @Test fun `loginWithCode rejects wrong code`() {
     session["emailCode"] = "$email:123456"
     session["codeTime"] = nowSec().epochSecond.toString()

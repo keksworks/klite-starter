@@ -2,7 +2,6 @@ package auth
 
 import klite.Email
 import klite.HttpExchange
-import klite.NotFoundException
 import klite.annotations.POST
 import klite.email.EmailContent
 import klite.email.EmailSender
@@ -11,6 +10,7 @@ import klite.jdbc.nowSec
 import klite.oauth.initSession
 import users.User
 import users.UserRepository
+import users.login
 
 class EmailAuthRoutes(
   private val userRepository: UserRepository,
@@ -28,8 +28,7 @@ class EmailAuthRoutes(
 
   @POST("/email/code") fun loginWithCode(req: EmailCodeRequest, e: HttpExchange): User {
     checkCode(e, req)
-    var user = userRepository.by(User::email to req.email) ?: throw NotFoundException("login.noUser")
-    user = user.copy(lastLoginAt = nowSec()).also { userRepository.save(it) }
+    val user = userRepository.login(req.email, req.email.value.substringBefore("@").replaceFirstChar { it.uppercase() }, "")
     e.initSession(user)
     return user
   }

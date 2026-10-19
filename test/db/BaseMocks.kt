@@ -4,6 +4,7 @@ import db.TestData.user
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
+import klite.Config
 import klite.DependencyInjectingRegistry
 import klite.HttpExchange
 import klite.StatusCode.Companion.Found
@@ -28,6 +29,7 @@ abstract class BaseMocks {
 
   init {
     clearAllMocks()
+    Config.overridable("OWN_DOMAIN", "localhost")
     exchange.apply {
       every { redirect(any<String>(), any()) } throws StatusCodeException(Found)
       every { redirect(any<URI>(), any()) } throws StatusCodeException(Found)
