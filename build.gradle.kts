@@ -11,7 +11,7 @@ repositories {
 }
 
 dependencies {
-  fun klite(module: String) = "com.github.keksworks.klite:klite-$module:8bd1db7e" // 2.0.7+
+  fun klite(module: String) = "com.github.keksworks.klite:klite-$module:2.1.0"
   implementation(klite("server"))
   implementation(klite("json"))
   implementation(klite("i18n"))
@@ -89,7 +89,7 @@ tasks.register<JavaExec>("types.ts") {
   dependsOn("classes")
   mainClass.set("klite.json.TSGenerator")
   classpath = sourceSets.main.get().runtimeClasspath
-  args("${project.buildDir}/classes/kotlin/main")
+  args("${project.buildDir}/classes/kotlin/main", "-r", "Routes")
   standardOutput = ByteArrayOutputStream()
   doLast {
     project.file("ui/src/api/types.ts").writeText(standardOutput.toString().replace("TSID", "Id"))
