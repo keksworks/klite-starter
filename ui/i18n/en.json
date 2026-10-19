@@ -23,7 +23,7 @@
   "emails": {
     "loginCode": {
       "subject": "Your login code",
-      "body": "Your one-time login code is <b>{code}</b>.\n\nIf you didn't request this code, please ignore this message."
+      "bodyHtml": "Your one-time login code is <b>{code}</b>.\n\nIf you didn't request this code, please ignore this message."
     }
   },
   "errors": {
