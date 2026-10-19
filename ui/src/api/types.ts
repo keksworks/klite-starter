@@ -11,6 +11,7 @@ export enum Role {ADMIN = 'ADMIN', USER = 'USER'}
 // class users.User
 export interface User {avatarUrl?: URI; email: Email; firstName: string; id: Id<User>; lang: string; lastLoginAt?: Instant; lastName: string; name: string; refreshToken?: string; role: Role; updatedAt?: Instant; createdAt: Instant}
 
+
 // klite.Id
 export type Id<T> = string & {_of?: T}
 // java.time.Instant

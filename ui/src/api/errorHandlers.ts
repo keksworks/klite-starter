@@ -5,7 +5,14 @@ import {navigate} from '@keksworks/svelte-tiny-router'
 
 export function jsErrorHandler(message: Event|string, source?: string, line?: number, column?: number, error?: Error) {
   reportError({message, source, line, column}, error)
+  if (isExternalError(message, source, error)) return console.error(message, error)
   alert((error?.name == 'SyntaxError' ? 'Your browser is probably too old, please update:' : 'Technical error occurred, please reload the page:') + '\n' + message)
+}
+
+// browser-injected scripts (e.g. WebKit's SharingLinkExtractor behind the share sheet) throw errors we cannot fix, don't bother the user with them
+function isExternalError(message: Event|string, source?: string, error?: Error) {
+  if (typeof message != 'string') return true
+  return /\w+JS\.\w/.test(message + (error?.stack ?? '')) || (!!source && !source.startsWith(location.origin))
 }
 
 export function reportError(body: object, error?: Error) {

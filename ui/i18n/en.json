@@ -15,7 +15,10 @@
   },
   "general": {
     "confirm": "Confirm",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "close": "Close",
+    "optional": "optional",
+    "noItems": "No items"
   },
   "emails": {
     "loginCode": {
@@ -29,6 +32,7 @@
     "notFoundInstructions": "Please check the URL in the address bar and try again",
     "alreadyExists": "Already exists",
     "networkUnavailable": "Cannot connect to the server, please try again later",
-    "notJson": "Communication with server is blocked, please check your network connection"
+    "notJson": "Communication with server is blocked, please check your network connection",
+    "tooLong": "Too long"
   }
 }

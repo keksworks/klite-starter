@@ -8,6 +8,7 @@ import klite.DependencyInjectingRegistry
 import klite.HttpExchange
 import klite.StatusCode.Companion.Found
 import klite.StatusCodeException
+import klite.email.EmailSender
 import users.UserRepository
 import java.net.URI
 
@@ -17,6 +18,7 @@ abstract class BaseMocks {
     val exchange = mockk<HttpExchange>(relaxed = true)
 
     val userRepository = mock<UserRepository>()
+    val emailSender = mock<EmailSender>(relaxed = true)
 
     inline fun <reified T: Any> create() = registry.create(T::class)
 

@@ -1,0 +1,173 @@
+<script lang="ts">
+  import {t} from 'i18n'
+  import Spinner from 'src/components/Spinner.svelte'
+  import {debounce} from 'src/shared/debounce'
+
+  type Column = keyof T | '' | false | undefined
+  type Field = Column | ((item: T) => any)
+  type T = $$Generic
+
+  export let id: string|undefined = undefined
+  export let items: T[]|undefined
+  export let labels: Record<string, any> = {}
+  export let columns: (Column | [string, Field])[]
+  export let rightAlignFrom: keyof T | number | undefined = undefined
+  export let rightAlign: (Column | string)[] = []
+  export let sortedBy: Field = undefined, asc = 1
+  export let renderMax = 100
+  export let onLoadMore: (() => void) | undefined = undefined
+  export let hasMore = false
+
+  $: fields = columns.map(c => c instanceof Array ? c[1] ?? c[0] : c) as Field[]
+  $: columnLabels = columns.map(c => c instanceof Array ? c[0] : c) as (string|undefined)[]
+  $: if (rightAlignFrom) rightAlign = columnLabels.slice(typeof rightAlignFrom == 'number' ? rightAlignFrom : fields.indexOf(rightAlignFrom))
+  $: rightAlignIndices = new Set(rightAlign.map(c => columnLabels.indexOf(c as string)))
+  $: visibleItems = (onLoadMore ? items : items?.slice(0, renderMax)) ?? []
+
+  function get(item: T, by: Field) {
+    const v = by instanceof Function ? by(item) : by && item[by]
+    return v?.toLowerCase ? v.toLowerCase() : v
+  }
+
+  function sortBy(array: T[], by: Field) {
+    if (sortedBy === by) asc = -asc; else asc = 1
+    sortedBy = by
+    return array.sort((a, b) => {
+      const bya = get(a, by), byb = get(b, by)
+      if (bya === byb) return 0
+      else if (bya > byb) return asc
+      else return -asc
+    })
+  }
+
+  function findScrollParent(el: HTMLElement | null): HTMLElement {
+    if (!el) return document.documentElement
+    const overflow = el.computedStyleMap?.().get('overflow-y')
+    return overflow == 'auto' || overflow == 'scroll' ? el : findScrollParent(el.parentElement)
+  }
+
+  let scrollable: HTMLElement
+  function renderMoreOnScroll(el: HTMLElement) {
+    scrollable = findScrollParent(el)
+
+    const onScroll = debounce(() => {
+        if (!items || (!onLoadMore && renderMax >= items.length)) return
+        const scrollMax = scrollable.scrollHeight - scrollable.clientHeight * 1.2
+        if (scrollable.scrollTop + scrollable.clientHeight <= scrollMax) return
+        if (onLoadMore) { onLoadMore(); return }
+        if (scrollable.scrollTop >= scrollMax) {
+          renderMax = items.length
+          queueMicrotask(() => scrollable.scrollTo(0, scrollable.scrollHeight))
+        } else {
+          renderMax += 50
+        }
+      }, 300)
+
+    ;(scrollable === document.documentElement ? window : scrollable).addEventListener('scroll', onScroll)
+    return {destroy: () => scrollable.removeEventListener('scroll', onScroll)}
+  }
+</script>
+
+<div class="-mx-4 overflow-x-auto md:mx-0 md:overflow-visible {$$props.class}" use:renderMoreOnScroll>
+  <div class="min-w-full pb-3">
+    <table {id}>
+      <thead>
+      <tr>
+        {#each columnLabels as column, i}
+          {#if column || column === ''}
+            <th onclick={() => items = items && !!column ? sortBy(items, fields[i]) : items}
+                scope="col"
+                class="text-muted {asc === 1 ? 'asc' : 'desc'} {rightAlignIndices.has(i) ? 'text-right' : ''}"
+                class:sortable={!!column}
+                class:sorted={sortedBy === fields[i]}>
+              {#if column}
+                <span class="pr-1">{labels[column] ?? column}</span>
+              {/if}
+            </th>
+          {/if}
+        {/each}
+      </tr>
+      {#if items}
+        <slot name="thead"/>
+      {/if}
+      </thead>
+      <tbody>
+      {#if items}
+        {#each visibleItems as item, i ((item as any)?.id ?? i)}
+          <slot {item} {i}>
+            <tr>
+              {#each fields as f, fi}
+                <td class:text-right={rightAlignIndices.has(fi)}>{get(item, f)}</td>
+              {/each}
+            </tr>
+          </slot>
+        {:else}
+          <tr>
+            <td colspan={columns.length} class="text-center">{t.general.noItems}</td>
+          </tr>
+        {/each}
+        {#if onLoadMore ? hasMore : renderMax < items.length}
+          <tr>
+            <td colspan={columns.length} class="text-center py-6">
+              <Spinner class="h-8"/>
+            </td>
+          </tr>
+        {/if}
+      {:else}
+        <tr>
+          <td colspan={columns.length} class="text-center py-12">
+            <Spinner class="h-8"/>
+          </td>
+        </tr>
+      {/if}
+      </tbody>
+      {#if items?.length}
+        <slot name="tfoot"/>
+      {/if}
+    </table>
+  </div>
+</div>
+
+<style lang="postcss">
+  @reference 'src/global.css';
+
+  table {
+    @apply relative bg-white text-black min-w-full md:shadow-sm border-separate border-spacing-0;
+  }
+
+  table :global(th), table :global(td) {
+    @apply px-4 py-3 border-b border-gray-200 lg:text-sm;
+  }
+
+  table thead th {
+    @apply text-xs font-medium tracking-wider sticky top-0 bg-white border-b-2 border-gray-200 border-solid;
+  }
+
+  table :global(th:last-child), :global(td:last-child:not(:first-child)) {
+    text-align: right;
+  }
+
+  th.sortable {
+    cursor: pointer;
+  }
+
+  th.sorted::after {
+    @apply border-gray-500;
+    position: absolute;
+    content: '';
+    transform: translateY(-50%);
+    top: 1.7em;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+  }
+
+  th.sorted.asc::after {
+    border-bottom: 5px solid;
+  }
+
+  th.sorted.desc::after {
+    border-top: 5px solid;
+  }
+</style>

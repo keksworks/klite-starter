@@ -35,7 +35,7 @@ class EmailAuthRoutes(
   }
 
   internal fun checkCode(e: HttpExchange, req: EmailCodeRequest) {
-    require(nowSec().epochSecond - (e.session["codeTime"]?.toLong() ?: 0) < 10 * 60 * 1000) { "Code expired" }
+    require(nowSec().epochSecond - (e.session["codeTime"]?.toLong() ?: 0) < 10 * 60) { "Code expired" }
     require(e.session["emailCode"] == "${req.email}:${req.code}") { "Invalid code" }
   }
 }

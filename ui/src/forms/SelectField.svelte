@@ -1,0 +1,40 @@
+<script lang="ts">
+  import FormField from './FormField.svelte'
+  import {onMount} from 'svelte'
+
+  export let label: string|undefined = undefined
+  export let id: string|undefined = undefined
+  export let emptyOption: string|false = false
+  export let options: {[value: string|number]: string|number}|string[]|string
+  export let value: string|number = ''
+  export let required = true
+  export let disabled = false
+  export let select: HTMLSelectElement|undefined = undefined
+  export let selectClass = ''
+
+  $: if (typeof value == 'number') value = value?.toString()
+
+  onMount(() => {
+    if (emptyOption === false && !value) value = Object.keys(options)[0]
+  })
+
+  $: if (emptyOption && !options[value as any]) value = ''
+</script>
+
+<svelte:options accessors/>
+
+<FormField bind:id {label} {required} class={$$props.class}>
+  <select {id} bind:this={select} class={selectClass}
+          bind:value {required} {disabled} {...$$restProps}>
+    {#if emptyOption !== false}<option value="">{emptyOption}</option>{/if}
+    {#each Object.entries(options) as [v, l] (v)}
+      {#if l}<option value={v} disabled={!v?.trim()}>{l}</option>{/if}
+    {/each}
+  </select>
+</FormField>
+
+<style lang="postcss">
+  select {
+    padding-right: 2em !important;
+  }
+</style>

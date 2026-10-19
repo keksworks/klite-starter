@@ -7,7 +7,7 @@
       "src/*": ["./src/*"]
     },
     "target": "esnext",
-    "types": ["vite/client", "src/globals", "./src/extensions/ArrayExtensions", "vitest/globals"],
+    "types": ["vite/client", "./src/globals", "./src/extensions/ArrayExtensions", "vitest/globals"],
     "noEmit": true,
     "useDefineForClassFields": true,
     "resolveJsonModule": true,

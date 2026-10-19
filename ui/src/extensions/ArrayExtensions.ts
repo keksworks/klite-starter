@@ -37,7 +37,9 @@ Array.prototype.remove = function<T>(i: number) {
 }
 
 Array.prototype.replaceById = function<T extends {id: string}>(e: T) {
-  this[this.findIndex((a: T) => a.id == e.id)] = e
+  let index = this.findIndex((a: T) => a.id == e.id)
+  if (index == -1) this.unshift(e)
+  else this[index] = e
   return this
 }
 
