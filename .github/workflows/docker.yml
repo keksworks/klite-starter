@@ -22,10 +22,11 @@ jobs:
         with:
           distribution: temurin
           java-version: 25
-          cache: gradle
 
       - name: API tests
-        run: ./gradlew test
+        run: ./kotlin test
+        env:
+          KOTLIN_CLI_NO_WELCOME_BANNER: 1
 
   build-and-push:
     runs-on: ubuntu-latest

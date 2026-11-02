@@ -10,8 +10,15 @@ RUN npm run check
 FROM eclipse-temurin:25-alpine AS build-server
 WORKDIR /app
 
+# needed by the Kotlin wrapper to download the Toolchain distribution
+RUN apk add --no-cache curl
+
+# use the JDK from the image instead of the provisioned glibc JRE (Alpine uses musl)
+ENV KOTLIN_CLI_JAVA_HOME=$JAVA_HOME
+ENV KOTLIN_CLI_NO_WELCOME_BANNER=1
+
 COPY . ./
-RUN --mount=type=cache,target=/root/.gradle ./gradlew testClasses jar --info
+RUN --mount=type=cache,target=/root/.cache/JetBrains/Kotlin ./kotlin build && ./kotlin do jar
 
 # The final image
 FROM eclipse-temurin:25-jre-alpine AS final

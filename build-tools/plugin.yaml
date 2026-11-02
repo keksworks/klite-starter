@@ -1,0 +1,29 @@
+tasks:
+  copyResources:
+    action: !buildtools.copyResources
+      dbDir: ${module.rootDir}/db
+      i18nDir: ${module.rootDir}/ui/i18n
+      outputDir: ${taskOutputDir}
+
+  generateTypes:
+    action: !buildtools.generateTypes
+      classes: ${module.classes}
+      runtimeClasspath: ${module.runtimeClasspath}
+      typesFile: ${module.rootDir}/ui/src/api/types.ts
+
+  dist:
+    action: !buildtools.dist
+      appJar: ${module.jar}
+      runtimeClasspath: ${module.runtimeClasspath}
+      distDir: ${module.rootDir}/build/libs
+      mainClass: ${module.settings.jvm.mainClass}
+
+commands:
+  - name: types.ts
+    performedBy: generateTypes
+  - name: jar
+    performedBy: dist
+
+generated:
+  resources:
+    - directory: ${tasks.copyResources.action.outputDir}

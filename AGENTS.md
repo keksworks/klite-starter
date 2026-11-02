@@ -6,7 +6,7 @@
 * Backend code is written in Kotlin using Klite framework; code must be short and concise
   * Klite guide: https://raw.githubusercontent.com/keksworks/klite/refs/heads/main/llms.txt
   * Ask user where already cloned klite repo is or offer to clone it if more deep exploration is needed
-  * Gradle source directories are simplified (just `src` & `test`)
+  * Source directories are simplified (just `src` & `test`)
   * In Kotlin, prefer expression body functions
   * Repositories can extend `db.CrudRepository` to avoid implementing all the basic operations
   * Repository tests extend `db.DBTest` and run on a real database
@@ -21,12 +21,12 @@
   * If there are new repositories/services, ass them to BaseMocks for reuse
   * PostgreSQL database changesets are in `db` directory following file per table structure
   * Do not use generic suffixes in class name, e.g. Data, Info, Dto - make names show intent
-  * Always run `./gradlew` with `--info` to see compilation errors/test failures
+  * Run `./kotlin` with `--log-level=debug` (before the command) to see compilation errors/test failures
 * Frontend is in `ui` directory and written using Svelte+TypeScript with TailwindCSS
   * Prefer Svelte 4 syntax (without runes), use event handlers without colons
   * Tests written using vitest; every new component need to have at least one basic render test
   * Backend converts empty strings into nulls when reading json, meaning that no normalization after binding from forms is necessary. FormField/Svelte inputs accept undefined values as empty strings also, so no need to create empty objects with empty strings.
-  * Backend types are converted to TypeScript interfaces for type safety in frontend using `./gradlew types.ts` and are stored in `ui/src/api/types.ts` - this is run automatically after backend compilation
+  * Backend types are converted to TypeScript interfaces for type safety in frontend using `./kotlin do types.ts` and are stored in `ui/src/api/types.ts`
   * In TS/JS prefer simple conditions, e.g. `if (some)`, not `if (some !== undefined)`
   * Avoid `null` unless necessary, prefer `undefined` and ? syntax for optional fields/arguments
 * Always add translations for all supported languages in `ui/i18n`

@@ -1,0 +1,38 @@
+product: jvm/app
+
+settings:
+  kotlin:
+    version: 2.4.20
+    freeCompilerArgs: [ -Xreturn-value-checker=check ]
+  jvm:
+    jdk:
+      version: 25
+    mainClass: LauncherKt
+    test:
+      freeJvmArgs:
+        - --add-opens=java.base/java.lang=ALL-UNNAMED
+        - -XX:-OmitStackTraceInFastThrow
+      systemProperties:
+        ENV: test
+
+repositories:
+  - https://jitpack.io
+
+dependencies:
+  - com.github.keksworks.klite:klite-server:2.1.0
+  - com.github.keksworks.klite:klite-json:2.1.0
+  - com.github.keksworks.klite:klite-i18n:2.1.0
+  - com.github.keksworks.klite:klite-jdbc:2.1.0
+  - com.github.keksworks.klite:klite-oauth:2.1.0
+  - com.github.keksworks.klite:klite-email:2.1.0
+  - com.github.keksworks.klite:klite-slf4j:2.1.0
+  - org.postgresql:postgresql:42.7.14
+
+test-dependencies:
+  - com.github.keksworks.klite:klite-jdbc-test:2.1.0
+  - org.junit.jupiter:junit-jupiter:6.0.3
+  - ch.tutteli.atrium:atrium-fluent:1.3.0-alpha-2
+  - io.mockk:mockk:1.14.11
+
+plugins:
+  build-tools: enabled
