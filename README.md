@@ -44,6 +44,7 @@ Build UI using: `npm run build`
 ## Development
 
 Start API by running the [Launcher](src/Launcher.kt).
+`./gradlew run` will auto-restart it after each compilation.
 
 It will automatically try to start the database using `docker compose up -d db`
 To access DB via IDE use credentials from [.env](.env) file.

@@ -1,5 +1,6 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.io.ByteArrayOutputStream
+import kotlin.concurrent.thread
 
 plugins {
   kotlin("jvm") version "2.4.20"
@@ -25,7 +26,7 @@ dependencies {
   testImplementation("org.junit.jupiter:junit-jupiter:6.0.3")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:6.0.3")
   testRuntimeOnly("org.junit.platform:junit-platform-launcher:6.0.3")
-  testImplementation("ch.tutteli.atrium:atrium-fluent:1.3.0-alpha-2")
+  testImplementation("ch.tutteli.atrium:atrium-fluent:1.3.0")
   testImplementation("io.mockk:mockk:1.14.11")
 }
 
@@ -78,11 +79,40 @@ tasks.jar {
   }
 }
 
-tasks.register<JavaExec>("run") {
-  workingDir(rootDir)
-  jvmArgs("--add-exports=java.base/sun.net.www=ALL-UNNAMED")
-  mainClass.set(mainClassName)
-  classpath = sourceSets.main.get().runtimeClasspath
+val restartMarker = layout.buildDirectory.file("run.marker")
+
+tasks.named("classes") {
+  doLast { restartMarker.get().asFile.writeText(System.currentTimeMillis().toString()) }
+}
+
+tasks.register("run") {
+  description = "Runs the app, restarting it whenever the build finishes"
+  group = "application"
+  dependsOn("classes")
+  doLast {
+    fun start() = ProcessBuilder(javaToolchains.launcherFor(java.toolchain).get().executablePath.toString(),
+      "--add-exports=java.base/sun.net.www=ALL-UNNAMED",
+      "-cp", sourceSets.main.get().runtimeClasspath.asPath, mainClassName)
+      .directory(projectDir).redirectErrorStream(true).start()
+      .also { app -> thread(isDaemon = true) { app.inputStream.copyTo(System.out) } }
+
+    val marker = restartMarker.get().asFile
+    var last = marker.lastModified()
+    var app = start()
+    try {
+      while (true) {
+        Thread.sleep(500)
+        val modified = marker.lastModified()
+        if (modified == last) continue
+        last = modified
+        logger.lifecycle("Build finished, restarting")
+        app.apply { toHandle().destroy(); waitFor() }
+        app = start()
+      }
+    } finally {
+      app.apply { toHandle().destroy(); waitFor() }
+    }
+  }
 }
 
 tasks.register<JavaExec>("types.ts") {
