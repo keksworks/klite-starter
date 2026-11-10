@@ -1,5 +1,6 @@
 package db
 
+import auth.EmailCodeRepository
 import db.TestData.user
 import io.mockk.clearAllMocks
 import io.mockk.every
@@ -19,6 +20,7 @@ abstract class BaseMocks {
     val exchange = mockk<HttpExchange>(relaxed = true)
 
     val userRepository = mock<UserRepository>()
+    val emailCodeRepository = mock<EmailCodeRepository>()
     val emailSender = mock<EmailSender>(relaxed = true)
 
     inline fun <reified T: Any> create() = registry.create(T::class)
@@ -39,6 +41,12 @@ abstract class BaseMocks {
     userRepository.apply {
       every { get(user.id) } returns user
       every { save(any()) } returns 1
+    }
+
+    emailCodeRepository.apply {
+      every { save(any()) } returns 1
+      every { countSentSince(any(), any()) } returns 0
+      every { deleteSentBefore(any()) } returns 0
     }
   }
 }

@@ -32,6 +32,8 @@
     "alreadyExists": "Already exists",
     "networkUnavailable": "Cannot connect to the server, please try again later",
     "notJson": "Communication with server is blocked, please check your network connection",
-    "tooLong": "Too long"
+    "tooLong": "Too long",
+    "invalidCode": "Invalid or expired code, please check it or request a new one",
+    "tooManyCodes": "Too many codes requested, please try again later"
   }
 }

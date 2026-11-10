@@ -7,6 +7,7 @@ import klite.email.FakeEmailSender
 import klite.email.SmtpEmailSender
 import klite.http.httpClient
 import klite.jdbc.RequestTransactionHandler
+import klite.jobs.JobRunner
 import klite.json.JsonBody
 import klite.oauth.AuthRoutes
 import klite.oauth.GoogleOAuthClient
@@ -15,6 +16,8 @@ import klite.oauth.OAuthUserProvider
 import todos.TodoRoutes
 import java.lang.management.ManagementFactory.getRuntimeMXBean
 import java.nio.file.Path
+import java.time.LocalTime
+import javax.sql.DataSource
 import kotlin.system.exitProcess
 import kotlin.time.Duration.Companion.days
 
@@ -27,6 +30,10 @@ fun main() {
   ).apply {
     initDB()
     use<RequestTransactionHandler>()
+
+    use(JobRunner(require<DataSource>(), requestIdGenerator).apply {
+      scheduleDaily(require<EmailCodeCleanupJob>(), LocalTime.of(4, 0))
+    })
 
     assets("/", AssetsHandler(Path.of("ui/public"), useIndexForUnknownPaths = true))
 
