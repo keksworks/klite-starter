@@ -6,6 +6,8 @@ import klite.annotations.annotated
 import klite.email.FakeEmailSender
 import klite.email.SmtpEmailSender
 import klite.http.httpClient
+import klite.jdbc.DBModule
+import klite.jdbc.DBSessionStore
 import klite.jdbc.RequestTransactionHandler
 import klite.json.JsonBody
 import klite.oauth.AuthRoutes
@@ -21,11 +23,12 @@ import kotlin.time.Duration.Companion.days
 fun main() {
   Config.useEnvFile()
 
+  val db = initDB()
   Server(
-    sessionStore = CookieSessionStore(cookie = Cookie("S", "", httpOnly = true, secure = Config.isProd, maxAge = 365.days)),
+    sessionStore = DBSessionStore(db, cookie = Cookie("SS", "", httpOnly = true, maxAge = 365.days)),
     httpExchangeCreator = ::XForwardedHttpExchange
   ).apply {
-    initDB()
+    use(DBModule(db))
     use<RequestTransactionHandler>()
 
     assets("/", AssetsHandler(Path.of("ui/public"), useIndexForUnknownPaths = true))

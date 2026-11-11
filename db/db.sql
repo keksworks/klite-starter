@@ -3,6 +3,7 @@
 --substitute createdAt=createdAt timestamptz not null default now()
 --substitute updatedAt=updatedAt timestamptz not null default now()
 
+--include migrator/db_sessions.sql
 --include app_user.sql
 --include change_history.sql
 --include users.sql

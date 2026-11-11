@@ -22,7 +22,6 @@ services:
       - SMTP_USER
       - SMTP_PASS
       - MAIL_FROM
-      - SESSION_SECRET
       - OWN_DOMAIN
       - GOOGLE_OAUTH_CLIENT_ID
       - GOOGLE_OAUTH_CLIENT_SECRET
