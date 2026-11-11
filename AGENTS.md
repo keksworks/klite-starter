@@ -29,6 +29,7 @@
   * Backend types are converted to TypeScript interfaces for type safety in frontend using `./gradlew types.ts` and are stored in `ui/src/api/types.ts` - this is run automatically after backend compilation
   * In TS/JS prefer simple conditions, e.g. `if (some)`, not `if (some !== undefined)`
   * Avoid `null` unless necessary, prefer `undefined` and ? syntax for optional fields/arguments
+  * All design should be responsive and mobile-first, using TailwindCSS classes, not custom CSS unless necessary
 * Always add translations for all supported languages in `ui/i18n`
 * Never commit code yourself, give developer an opportunity to review changes first
 
