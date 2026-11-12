@@ -13,6 +13,7 @@ services:
       - no-new-privileges:true
     environment:
       - ENV=demo
+      - LOGGER_CLASS
       - DB_URL=jdbc:postgresql://db/$DB_USER
       - DB_USER
       - DB_PASS
