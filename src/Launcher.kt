@@ -7,7 +7,6 @@ import klite.email.FakeEmailSender
 import klite.email.SmtpEmailSender
 import klite.http.httpClient
 import klite.jdbc.DBModule
-import klite.jdbc.DBSessionStore
 import klite.jdbc.RequestTransactionHandler
 import klite.json.JsonBody
 import klite.oauth.AuthRoutes
@@ -18,14 +17,14 @@ import todos.TodoRoutes
 import java.lang.management.ManagementFactory.getRuntimeMXBean
 import java.nio.file.Path
 import kotlin.system.exitProcess
-import kotlin.time.Duration.Companion.days
+import kotlin.time.Duration.Companion.minutes
 
 fun main() {
   Config.useEnvFile()
 
   val db = initDB()
   Server(
-    sessionStore = DBSessionStore(db, cookie = Cookie("SS", "", httpOnly = true, maxAge = 365.days)),
+    sessionStore = UserSessionStore(db),
     httpExchangeCreator = ::XForwardedHttpExchange
   ).apply {
     use(DBModule(db))
@@ -57,9 +56,11 @@ fun main() {
 
       before<AccessChecker>()
 
+      annotated<TodoRoutes>("/todos")
+
+      rateLimit(10, 1.minutes)
       annotated<AuthRoutes>(annotations = listOf(Public()))
       annotated<EmailAuthRoutes>("/auth", listOf(Public()))
-      annotated<TodoRoutes>("/todos")
     }
 
     start()
