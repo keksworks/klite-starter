@@ -10,12 +10,16 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import users.Role.ADMIN
 import users.Role.USER
+import users.User
 
 class AccessCheckerTest: BaseMocks() {
   val session = Session()
   val checker = create<AccessChecker>()
 
-  init { every { exchange.session } returns session }
+  init {
+    every { exchange.session } returns session
+    every { exchange.attr<User?>("user") } returns null
+  }
 
   @Test fun `allows public access`() {
     every { exchange.route.annotations } returns listOf(Public())
@@ -27,37 +31,32 @@ class AccessCheckerTest: BaseMocks() {
   }
 
   @Test fun `access granted`() {
-    session["userId"] = user.id.toString()
+    every { exchange.attr<User?>("user") } returns user
     every { exchange.route.annotations } returns listOf(Access(USER))
     checker.before(exchange)
-    verify {
-      exchange.attr("user", user)
-      userRepository.setAppUser(user)
-    }
+    verify { userRepository.setAppUser(user) }
   }
 
   @Test fun `forbids access without matching role`() {
-    session["userId"] = user.id.toString()
+    every { exchange.attr<User?>("user") } returns user
     every { exchange.route.annotations } returns listOf(Access(ADMIN))
     assertThrows<ForbiddenException> { checker.before(exchange) }
-    verify { exchange.attr("user", user) }
   }
 
   @Test fun `Access annotation overrides Public (eg on class)`() {
-    session["userId"] = user.id.toString()
+    every { exchange.attr<User?>("user") } returns user
     every { exchange.route.annotations } returns listOf(Public(), Access(ADMIN))
     assertThrows<ForbiddenException> { checker.before(exchange) }
   }
 
   @Test fun `allows access for route with multiple roles`() {
-    session["userId"] = user.id.toString()
+    every { exchange.attr<User?>("user") } returns user
     every { exchange.route.annotations } returns listOf(Access(ADMIN, USER))
     checker.before(exchange)
-    verify { exchange.attr("user", user) }
   }
 
   @Test fun `requires @Access annotation`() {
-    session["userId"] = user.id.toString()
+    every { exchange.attr<User?>("user") } returns user
     assertThrows<IllegalStateException> { checker.before(exchange) }
   }
 }

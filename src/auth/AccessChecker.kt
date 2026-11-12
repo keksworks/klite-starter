@@ -1,6 +1,5 @@
 package auth
 
-import db.Id
 import klite.Before
 import klite.ForbiddenException
 import klite.HttpExchange
@@ -20,8 +19,8 @@ import kotlin.reflect.full.hasAnnotation
 class AccessChecker(private val userRepository: UserRepository): Before {
   override fun before(exchange: HttpExchange) {
     if (exchange.method == OPTIONS) return
-    val user = exchange.session["userId"]?.let { userRepository.get(Id(it)) }
-    exchange.attr("user", user)
+    exchange.session // the session store loads the authenticated user along with it, in a single query
+    val user = exchange.userOrNull
     val access = exchange.route.findAnnotation<Access>()
     val isPublic = access == null && exchange.route.hasAnnotation<Public>() || exchange.route is NotFoundRoute
     if (user == null && !isPublic) throw ForbiddenException()
@@ -33,5 +32,8 @@ class AccessChecker(private val userRepository: UserRepository): Before {
   }
 }
 
-val HttpExchange.user: User get() = attr("user")
+var HttpExchange.user: User
+  get() = attr("user")
+  set(value) { attrPut(value); attr("user", value) }
+
 val HttpExchange.userOrNull: User? get() = attr("user")
