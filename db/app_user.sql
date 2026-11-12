@@ -12,3 +12,6 @@ alter default privileges in schema public grant execute on functions to app;
 
 --changeset db_changelog:revoke-from-app
 revoke select, insert, update on db_changelog from app;
+
+--changeset db_sessions:grant-delete
+grant delete on db_sessions to app;
