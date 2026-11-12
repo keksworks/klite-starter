@@ -10,5 +10,5 @@ alter default privileges in schema public grant select, insert, update on tables
 alter default privileges in schema public grant usage, select on sequences to app;
 alter default privileges in schema public grant execute on functions to app;
 
---changeset db_sessions:grant-delete
+--changeset db_sessions:grant
 grant select, insert, update, delete on db_sessions to app;
