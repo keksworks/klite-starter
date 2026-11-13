@@ -7,14 +7,14 @@ RUN --mount=type=cache,target=/root/.npm npm ci
 RUN npm run build
 RUN npm run check
 
-FROM eclipse-temurin:25-alpine AS build-server
+FROM bellsoft/liberica-runtime-container:jdk-25-slim-musl AS build-server
 WORKDIR /app
 
 COPY . ./
 RUN --mount=type=cache,target=/root/.gradle ./gradlew testClasses jar --info
 
 # The final image
-FROM eclipse-temurin:25-jre-alpine AS final
+FROM bellsoft/liberica-runtime-container:jre-25-slim-musl AS final
 RUN adduser -S user
 RUN rm -fr /usr/sbin /bin/ch*
 
