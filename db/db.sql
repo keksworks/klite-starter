@@ -7,4 +7,5 @@
 --include app_user.sql
 --include change_history.sql
 --include users.sql
+--include email_codes.sql
 --include todos.sql

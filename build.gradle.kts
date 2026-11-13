@@ -17,6 +17,7 @@ dependencies {
   implementation(klite("json"))
   implementation(klite("i18n"))
   implementation(klite("jdbc"))
+  implementation(klite("jobs"))
   implementation(klite("oauth"))
   implementation(klite("email"))
   implementation(klite("slf4j"))
