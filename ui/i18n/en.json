@@ -10,6 +10,9 @@
     "sendCode": "Send code to email",
     "codeSent": "Code sent to {email}, check your email and enter it below",
     "code": "Login code",
+    "codeExpired": "Code expired, please request a new one",
+    "invalidCode": "Invalid code, please try again",
+    "tooManyCodeTries": "Too many attempts, please request a new code",
     "logout": "Logout"
   },
   "general": {

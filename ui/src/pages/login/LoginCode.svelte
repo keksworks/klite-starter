@@ -6,6 +6,7 @@
   import Form from 'src/forms/Form.svelte'
   import FormField from 'src/forms/FormField.svelte'
   import Button from 'src/components/Button.svelte'
+  import {showToast, ToastType} from 'src/stores/toasts'
   import type {User} from 'src/api/types'
 
   export let waitingForCode = false
@@ -14,10 +15,18 @@
 
   async function submit() {
     if (waitingForCode) {
-      initSession(await api.post<User>('auth/email/code', {email, code}))
-      let to = location.hash.substring(1)
-      if (!to || to == '/') to = '/'
-      navigate(to)
+      try {
+        initSession(await api.post<User>('auth/email/code', {email, code}))
+        let to = location.hash.substring(1)
+        if (!to || to == '/') to = '/'
+        navigate(to)
+      } catch (e: any) {
+        if (e?.message == 'login.tooManyCodeTries') {
+          waitingForCode = false
+          code = ''
+          showToast(t.login.tooManyCodeTries, {type: ToastType.ERROR})
+        } else throw e
+      }
     } else {
       await api.post('auth/email', {email})
       waitingForCode = true

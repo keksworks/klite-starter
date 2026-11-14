@@ -20,10 +20,12 @@ class EmailAuthRoutesTest: BaseMocks() {
   init { every { exchange.session } returns session }
 
   @Test fun `sendCode emails a 6-digit code`() {
+    session["codeTries"] = 2
     routes.sendCode(EmailRequest(email), exchange)
     val code = session["emailCode"]!!.substringAfter(':')
     expect(code.length).toEqual(6)
     expect(session["codeTime"]).toEqual(nowSec().epochSecond.toString())
+    expect(session["codeTries"]).toEqual("0")
     verify { emailSender.send(email, match { it.substitutions["code"] == code }) }
   }
 
@@ -52,7 +54,23 @@ class EmailAuthRoutesTest: BaseMocks() {
   @Test fun `loginWithCode rejects wrong code`() {
     session["emailCode"] = "$email:123456"
     session["codeTime"] = nowSec().epochSecond.toString()
-    assertThrows<IllegalArgumentException> { routes.loginWithCode(EmailCodeRequest(email, "000000"), exchange) }
+
+    val e = assertThrows<IllegalArgumentException> { routes.loginWithCode(EmailCodeRequest(email, "000000"), exchange) }
+    expect(e.message).toEqual("login.invalidCode")
+    expect(session["emailCode"]).toEqual("$email:123456")
+    expect(session["codeTries"]).toEqual("1")
+  }
+
+  @Test fun `loginWithCode resets code after max tries`() {
+    session["emailCode"] = "$email:123456"
+    session["codeTime"] = nowSec().epochSecond.toString()
+    repeat(2) { assertThrows<IllegalArgumentException> { routes.loginWithCode(EmailCodeRequest(email, "000000"), exchange) } }
+
+    val e = assertThrows<IllegalArgumentException> { routes.loginWithCode(EmailCodeRequest(email, "000000"), exchange) }
+    expect(e.message).toEqual("login.tooManyCodeTries")
+    expect(session["emailCode"]).toEqual(null)
+    expect(session["codeTime"]).toEqual(null)
+    expect(session["codeTries"]).toEqual(null)
   }
 
   @Test fun `loginWithCode rejects expired code`() {

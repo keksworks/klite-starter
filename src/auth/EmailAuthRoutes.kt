@@ -19,7 +19,8 @@ class EmailAuthRoutes(
   @POST("/email") fun sendCode(req: EmailRequest, e: HttpExchange) {
     val code = (1..6).joinToString("") { (0..9).random().toString() }
     e.session["emailCode"] = "${req.email}:$code"
-    e.session["codeTime"] = nowSec().epochSecond.toString()
+    e.session["codeTime"] = nowSec().epochSecond
+    e.session["codeTries"] = 0
     emailSender.send(req.email, EmailContent(e.lang, "loginCode", mapOf(
       "code" to code,
       "email" to req.email.value
@@ -34,8 +35,25 @@ class EmailAuthRoutes(
   }
 
   internal fun checkCode(e: HttpExchange, req: EmailCodeRequest) {
-    require(nowSec().epochSecond - (e.session["codeTime"]?.toLong() ?: 0) < 10 * 60) { "Code expired" }
-    require(e.session["emailCode"] == "${req.email}:${req.code}") { "Invalid code" }
+    require(nowSec().epochSecond - (e.session["codeTime"]?.toLong() ?: 0) < 10 * 60) { "login.codeExpired" }
+    require(e.session["emailCode"] == "${req.email}:${req.code}") { onInvalidCode(e) }
+  }
+
+  /** counts failed attempts and resets the code after [maxCodeTries], so it cannot be brute-forced */
+  private fun onInvalidCode(e: HttpExchange): String {
+    val tries = (e.session["codeTries"]?.toInt() ?: 0) + 1
+    if (tries < maxCodeTries) {
+      e.session["codeTries"] = tries.toString()
+      return "login.invalidCode"
+    }
+    e.session["emailCode"] = null
+    e.session["codeTime"] = null
+    e.session["codeTries"] = null
+    return "login.tooManyCodeTries"
+  }
+
+  private companion object {
+    const val maxCodeTries = 3
   }
 }
 
