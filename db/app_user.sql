@@ -1,5 +1,5 @@
 --changeset app-user onFail:MARK_RAN
-create user app with password 'app-secret';
+create user app with password '${DB_APP_PASS}';
 -- in Heroku, it needs to be created manually with read-write permissions
 
 --changeset app-user-grants
