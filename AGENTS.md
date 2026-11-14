@@ -21,6 +21,7 @@
   * If there are new repositories/services, ass them to BaseMocks for reuse
   * PostgreSQL database changesets are in `db` directory following file per table structure
   * Do not use generic suffixes in class name, e.g. Data, Info, Dto - make names show intent
+  * Entity fields should generally mirror the database table columns, jsonb columns are good instead of relations for data that is usually needed with the entity anyway. Also, computed (not stored) entity properties are good for reusable derived values.
   * Always run `./gradlew` with `--info` to see compilation errors/test failures
 * Frontend is in `ui` directory and written using Svelte+TypeScript with TailwindCSS
   * Prefer Svelte 4 syntax (without runes), use event handlers without colons
@@ -30,6 +31,9 @@
   * In TS/JS prefer simple conditions, e.g. `if (some)`, not `if (some !== undefined)`
   * Avoid `null` unless necessary, prefer `undefined` and ? syntax for optional fields/arguments
   * All design should be responsive and mobile-first, using TailwindCSS classes, not custom CSS unless necessary
+* External integrations:
+  * Always build a separate Client class for each external service, with a single method for each API endpoint used
+  * Build a Service class that uses the Client and implements the business logic for the integration
 * Always add translations for all supported languages in `ui/i18n`
 * Never commit code yourself, give developer an opportunity to review changes first
 
