@@ -9,6 +9,7 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
+  VERSION: ${{ github.sha }}
 
 jobs:
   test:
@@ -60,9 +61,7 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=ref,event=branch
-            type=ref,event=pr
-            type=sha
+            type=raw,value=${{ env.VERSION }}
             type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'main') }}
 
       - name: Build and push Docker image
@@ -74,6 +73,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           network: host
           build-args: |
+            VERSION=${{ env.VERSION }}
             AOT_DB_HOST=localhost
           cache-from: type=gha
           cache-to: type=gha,mode=max
